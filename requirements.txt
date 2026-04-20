@@ -1,19 +1,19 @@
-# requirements.txt - 锁定兼容版本
+# 核心构建工具
+pip>=24.0
+setuptools>=65.5.0
+wheel>=0.40.0
 
-# 核心框架
+# Web 框架
 Flask==2.3.3
 Flask-SQLAlchemy==3.0.5
 Flask-Login==0.6.2
+Werkzeug==2.3.7
+gunicorn==21.2.0
 
-# 数据库
+# 数据库驱动
 psycopg2-binary==2.9.7
 
-# 关键修复：锁定兼容 Python 3.11 的稳定版本
-numpy==1.24.3
+# Excel 处理 (锁定在 2.0.3 版本，完美兼容 Python 3.11)
 pandas==2.0.3
-
-# Excel 支持
 openpyxl==3.1.2
-
-# 部署
-gunicorn==21.2.0
+xlrd==2.0.1
