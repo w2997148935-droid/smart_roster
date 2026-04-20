@@ -1,26 +1,21 @@
-# render.yaml - 强制锁定 Python 3.11 以兼容 Pandas
-
 services:
   - type: web
     name: smart-roster
+    # 关键修复：强制指定使用 Python 3.11 的官方镜像
     runtime:
-      # 关键修复：使用官方 Python 3.11 基础镜像
-      image: public.ecr.aws/render/python:3.11
-    buildCommand: |
-      # 安装依赖（升级 pip 以支持旧版 Pandas）
-      python -m pip install --upgrade pip
-      pip install -r requirements.txt
-    startCommand: gunicorn app:app
+      image: public.ecr.aws/render/cpython:3.11
+    buildCommand: "pip install --upgrade pip setuptools wheel && pip install -r requirements.txt"
+    startCommand: "gunicorn app:app"
     envVars:
-      - key: DATABASE_URL
-        fromDatabase:
-          name: roster-postgres
-          property: connectionString
       - key: SECRET_KEY
         generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: roster-db
+          property: connectionString
 
 databases:
-  - name: roster-postgres
+  - name: roster-db
     databaseName: rosterdb
     user: rosteruser
     plan: free
