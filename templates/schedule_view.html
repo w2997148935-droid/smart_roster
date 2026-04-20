@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>我的排班表</h2>
+<div class="table-responsive">
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>日期</th>
+                <th>时间段</th>
+                <th>状态</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for shift in shifts %}
+            <tr>
+                <td>{{ shift.date }}</td>
+                <td>
+                    {% if shift.slot == 1 %}早班 (08:00-10:00)
+                    {% elif shift.slot == 2 %}上午 (10:00-12:00)
+                    {% elif shift.slot == 3 %}午间 (12:00-14:00)
+                    {% elif shift.slot == 4 %}下午 (14:00-16:00)
+                    {% elif shift.slot == 5 %}傍晚 (16:00-18:00)
+                    {% elif shift.slot == 6 %}晚班 (18:00-20:00)
+                    {% else %}时段 {{ shift.slot }}{% endif %}
+                </td>
+                <td>
+                    {% if shift.status == 'confirmed' %}
+                        <span class="badge bg-success">已确认</span>
+                    {% elif shift.status == 'leave' %}
+                        <span class="badge bg-danger">请假</span>
+                    {% else %}
+                        <span class="badge bg-secondary">{{ shift.status }}</span>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

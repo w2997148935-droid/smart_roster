@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>欢迎回来, {{ current_user.name }}</h2>
+<div class="alert alert-secondary d-flex justify-content-between align-items-center">
+    <span><strong>当前组别:</strong> {{ current_user.group }}</span>
+    <span><strong>累积值班次数:</strong> <span class="badge bg-primary fs-6">{{ count }}</span> 次</span>
+</div>
+
+<div class="row mt-4">
+    <!-- 待我审批的换班 -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-warning">收到的换班申请</div>
+            <div class="card-body">
+                {% if recv_reqs %}
+                    <table class="table table-sm">
+                        <thead><tr><th>申请人ID</th><th>班次信息</th><th>操作</th></tr></thead>
+                        <tbody>
+                        {% for req in recv_reqs %}
+                            <tr>
+                                <td>{{ req.from_user_id }}</td>
+                                <td>{{ req.shift.date }} 时段{{ req.shift.slot }}</td>
+                                <td>
+                                    <a href="/swap_approve/{{ req.id }}" class="btn btn-sm btn-success">同意</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p class="text-muted mb-0">暂无新申请</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- 我发出的申请 -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-info">我发出的换班申请</div>
+            <div class="card-body">
+                {% if sent_reqs %}
+                    <ul class="list-group list-group-flush">
+                    {% for req in sent_reqs %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            发给: {{ req.to_user_id }} ({{ req.shift.date }} 时段{{ req.shift.slot }})
+                            <span class="badge bg-warning text-dark">审批中</span>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-muted mb-0">暂无进行中的申请</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

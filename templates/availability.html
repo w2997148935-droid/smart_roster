@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>填写空闲时间</h2>
+<p class="text-muted">请勾选您方便值班的时间段（蓝色为选中）。提交后管理员方可排班。</p>
+
+<div class="table-responsive">
+    <table class="table table-bordered text-center">
+        <thead class="table-light">
+            <tr>
+                <th style="width: 100px;" class="align-middle">时间段</th>
+                {% for date in dates %}
+                    <th>{{ date }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for slot in range(1, 7) %}
+            <tr>
+                <td class="align-middle"><strong>时段 {{ slot }}</strong></td>
+                {% for date in dates %}
+                <td>
+                    <input type="checkbox" id="cb_{{ date }}_{{ slot }}" class="slot-checkbox" data-date="{{ date }}" data-slot="{{ slot }}">
+                    <label for="cb_{{ date }}_{{ slot }}" class="slot-label">&nbsp;</label>
+                </td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<button class="btn btn-success btn-lg mt-3 w-100" onclick="submitAvailability()">提交空闲时间</button>
+
+<script>
+    function submitAvailability() {
+        const checkboxes = document.querySelectorAll('.slot-checkbox:checked');
+        let dataMap = {};
+        
+        checkboxes.forEach(cb => {
+            const date = cb.getAttribute('data-date');
+            const slot = parseInt(cb.getAttribute('data-slot'));
+            if (!dataMap[date]) dataMap[date] = [];
+            dataMap[date].push(slot);
+        });
+        
+        const payload = Object.keys(dataMap).map(date => ({
+            date: date,
+            slots: dataMap[date]
+        }));
+        
+        fetch('/availability', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(payload)
+        })
+        .then(res => res.json())
+        .then(data => {
+            if(data.success) alert('提交成功！');
+        });
+    }
+</script>
+{% endblock %}

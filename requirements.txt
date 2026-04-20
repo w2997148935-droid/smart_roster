@@ -1,0 +1,19 @@
+# 核心构建工具
+pip>=24.0
+setuptools>=65.5.0
+wheel>=0.40.0
+
+# Web 框架
+Flask==2.3.3
+Flask-SQLAlchemy==3.0.5
+Flask-Login==0.6.2
+Werkzeug==2.3.7
+gunicorn==21.2.0
+
+# 数据库驱动
+psycopg2-binary==2.9.7
+
+# Excel 处理 (保留 Pandas)
+pandas==2.1.4
+openpyxl==3.1.2
+xlrd==2.0.1

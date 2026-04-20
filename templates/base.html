@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能排班系统</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .slot-checkbox { display: none; }
+        .slot-label { cursor: pointer; padding: 8px 12px; margin: 2px; border: 1px solid #ddd; border-radius: 4px; display: inline-block; min-width: 20px; text-align: center;}
+        .slot-checkbox:checked + .slot-label { background-color: #0d6efd; color: white; border-color: #0d6efd; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-dark mb-4">
+        <div class="container">
+            <a class="navbar-brand" href="/">智能排班</a>
+            <div class="navbar-nav ms-auto">
+                {% if current_user.is_authenticated %}
+                    <a class="nav-link" href="/dashboard">主页</a>
+                    <a class="nav-link" href="/availability">填写空闲</a>
+                    <a class="nav-link" href="/schedule">我的排班</a>
+                    {% if current_user.is_admin %}
+                        <a class="nav-link" href="/admin">管理后台</a>
+                    {% endif %}
+                    <a class="nav-link" href="/logout">退出</a>
+                {% else %}
+                    <a class="nav-link" href="/login">登录</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="alert alert-info">{{ messages[0] }}</div>
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>
