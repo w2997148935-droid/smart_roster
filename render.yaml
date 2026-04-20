@@ -1,9 +1,11 @@
 services:
   - type: web
     name: smart-roster
-    # 关键修复：强制指定使用 Python 3.11 的官方镜像
-    runtime:
-      image: public.ecr.aws/render/cpython:3.11
+    # 关键修复：使用 docker 环境代替 python 环境，以强制指定镜像
+    env: docker
+    dockerfilePath: ./Dockerfile
+    region: singapore
+    plan: free
     buildCommand: "pip install --upgrade pip setuptools wheel && pip install -r requirements.txt"
     startCommand: "gunicorn app:app"
     envVars:
